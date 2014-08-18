@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ResolveReferencesDependsOn>
+      $(ResolveReferencesDependsOn);
+      ResolveEmbeddedReferences;
+    </ResolveReferencesDependsOn>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      CopyRequiredEmbeddedReferences;
+    </BuildDependsOn>
+  </PropertyGroup>
+
+  <Target Name="ResolveEmbeddedReferences">
+    <PropertyGroup>
+      <TemporaryEmbeddedAssemblyPath>$(BaseIntermediateOutputPath)\EmbeddedReferences</TemporaryEmbeddedAssemblyPath>
+    </PropertyGroup>
+    <ExpandEmbeddedAssemblies
+    BaseIntermediateOutputPath="$(TemporaryEmbeddedAssemblyPath)"
+    References="@(ReferencePath)">
+      <Output
+      TaskParameter="EmbeddedReferences"
+      ItemName="ReferencePath" />
+      <Output
+      TaskParameter="EmbeddedReferences"
+      ItemName="_EmbeddedReferences" />
+    </ExpandEmbeddedAssemblies>
+  </Target>
+
+  <Target Name="CopyRequiredEmbeddedReferences">
+    <GetRequiredEmbeddedReferences
+    TargetPath="$(TargetPath)"
+    References="@(ReferencePath)"
+    EmbeddedReferences="@(_EmbeddedReferences)">
+      <Output
+      TaskParameter="RequiredEmbeddedReferences"
+      ItemName="_RequiredEmbeddedReferences" />
+    </GetRequiredEmbeddedReferences>
+    <Copy SourceFiles="@(_RequiredEmbeddedReferences)"
+    DestinationFolder="$(OutputPath)" />
+  </Target>
+</Project>

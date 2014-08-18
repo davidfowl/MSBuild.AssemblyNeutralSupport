@@ -11,6 +11,9 @@
     </BuildDependsOn>
   </PropertyGroup>
 
+  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)\Microsoft.Build.AssemblyNeutral.dll" TaskName="ExpandEmbeddedAssemblies"></UsingTask>
+  <UsingTask AssemblyFile="$(MSBuildThisFileDirectory)\Microsoft.Build.AssemblyNeutral.dll" TaskName="GetRequiredEmbeddedReferences"></UsingTask>
+
   <Target Name="ResolveEmbeddedReferences">
     <PropertyGroup>
       <TemporaryEmbeddedAssemblyPath>$(BaseIntermediateOutputPath)\EmbeddedReferences</TemporaryEmbeddedAssemblyPath>
